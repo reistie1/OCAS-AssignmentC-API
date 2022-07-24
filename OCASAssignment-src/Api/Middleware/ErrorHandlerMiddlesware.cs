@@ -3,7 +3,7 @@ using System.Net;
 using System.Text.Json;
 
 
-namespace DadolinksRetail.WebApi.Middleware
+namespace OCASAPI.WebApi.Middleware
 {
     /// <summary>
     /// Error Handling Middleware, to catch any errors or exceptions that occurred before
@@ -34,9 +34,6 @@ namespace DadolinksRetail.WebApi.Middleware
         {
             try
             {
-                context.Response.Headers.Append("Cache-Control", "no-cache,no-store,must-revalidate");
-                context.Response.Headers.Append("Pragma", "no-cache");
-                context.Response.Headers.Append("Expires", "0");
                 await _next(context);
             }
             catch (Exception error)
