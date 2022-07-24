@@ -51,7 +51,7 @@ namespace OCASAPI.Infrastructure.Extensions
                     // o.Audience = authority + "/resources";
                     o.RequireHttpsMetadata = false; 
                     //o.TokenValidationParameters = new TokenValidationParameters { RoleClaimType = "role",  ValidateAudience = true, ValidateIssuer = true, ValidIssuer = authority, ValidAudience = authority + "/resources" };
-                    o.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
+                    //o.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
 
                     o.Events = new JwtBearerEvents()
                     {

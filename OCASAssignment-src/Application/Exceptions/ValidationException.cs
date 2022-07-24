@@ -1,6 +1,4 @@
 using FluentValidation.Results;
-using System;
-using System.Collections.Generic;
 
 namespace OCASAPI.Application.Exceptions
 {

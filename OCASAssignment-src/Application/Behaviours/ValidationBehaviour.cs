@@ -26,7 +26,6 @@ namespace OCASAPI.Application.Behaviours
         /// <returns>
         /// Collection of <see cref="FluentValidation.Results.ValidationFailure"/> for a given request
         /// </returns>
-        /// <exception cref="Dadolinks.Application.Exceptions.ValidationException">
         /// <pararef name="request" />
         /// </exception>
         public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)

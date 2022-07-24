@@ -3,7 +3,7 @@ using System.Net;
 using System.Text.Json;
 
 
-namespace OCASAPI.WebApi.Middleware
+namespace OCASAPI.WebAPI.Middleware
 {
     /// <summary>
     /// Error Handling Middleware, to catch any errors or exceptions that occurred before

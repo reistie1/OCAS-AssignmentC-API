@@ -1,4 +1,5 @@
 
+using OCASAPI.WebAPI.Middleware;
 /// <summary>
 /// App extension to register swagger extension and error handling middleware for the application 
 /// </summary>
@@ -28,7 +29,7 @@ namespace OCASAPI.WebApi.Extensions
         /// <param name="app">Instance of <see cref="Microsoft.AspNetCore.Builder.ApplicationBuilder"/></param>
         public static void UseErrorHandlingMiddleware(this IApplicationBuilder app)
         {
-            //app.UseMiddleware<ErrorHandlerMiddleware>();
+            app.UseMiddleware<ErrorHandlerMiddleware>();
         }
     }
 }
