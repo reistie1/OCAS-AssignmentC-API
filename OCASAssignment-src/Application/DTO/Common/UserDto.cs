@@ -1,4 +1,4 @@
-namespace OCASAPI.Application.DTO.Dto
+namespace OCASAPI.Application.DTO.Common
 {
     public class UserDto
     {

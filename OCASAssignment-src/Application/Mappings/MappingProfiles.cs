@@ -1,4 +1,6 @@
 using AutoMapper;
+using OCAS.Domain.Common;
+using OCASAPI.Application.DTO.Common;
 
 namespace OCASAPI.Application.Mappings
 {
@@ -6,7 +8,9 @@ namespace OCASAPI.Application.Mappings
     {
         public MappingProfiles()
         {
-            
+            CreateMap<Address, AddressDto>().ReverseMap();
+
         }
+
     }
 }

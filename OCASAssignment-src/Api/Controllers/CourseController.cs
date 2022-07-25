@@ -33,5 +33,11 @@ namespace OCASAPI.WebAPI.Controllers
         {
             return Ok();
         }
+
+        [HttpGet("{CourseId}")]
+        public async Task<IActionResult> GetSchoolCourse([FromRoute] Guid CourseId)
+        {
+            return Ok();
+        }
     }
 }

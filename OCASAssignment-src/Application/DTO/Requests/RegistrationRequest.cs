@@ -1,4 +1,4 @@
-using OCASAPI.Application.DTO.Dto;
+using OCASAPI.Application.DTO.Common;
 
 namespace OCASAPI.Application.DTO.Requests
 {
