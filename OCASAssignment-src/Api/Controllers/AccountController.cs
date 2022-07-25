@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using OCASAPI.Application.DTO.Requests;
+using OCASAPI.Application.Interfaces;
 
 namespace OCASAPI.WebAPI.Controllers
 {
@@ -7,9 +8,12 @@ namespace OCASAPI.WebAPI.Controllers
     public class AccountController : BaseAPIController
     {
         private readonly IAccountService _accountService;
-        public AccountController(IAccountService accountService)
+        private readonly IAppLogger<AccountController> _logger;
+
+        public AccountController(IAccountService accountService, IAppLogger<AccountController> logger)
         {
             _accountService = accountService;
+            _logger = logger;
         }
 
         [HttpPost("/register")]
@@ -23,6 +27,24 @@ namespace OCASAPI.WebAPI.Controllers
             }
             catch(Exception e)
             {
+                _logger.LogWarning("Error registering school {error} - {stackTrace}", e.Message, e.StackTrace);
+                return BadRequest(e);
+            }
+            
+        }
+
+        [HttpPost("/register-user")]
+        public async Task<IActionResult> RegisterUser([FromBody] RegisterUserRequest request)
+        {
+            try
+            {
+                var result = await _accountService.RegisterUser(request);
+
+                return Ok(result);
+            }
+            catch(Exception e)
+            {
+                _logger.LogWarning("Error registering user {error} - {stackTrace}", e.Message, e.StackTrace);
                 return BadRequest(e);
             }
             
@@ -39,6 +61,7 @@ namespace OCASAPI.WebAPI.Controllers
             }
             catch(Exception e)
             {
+                _logger.LogWarning("Error logging in user {error} - {stackTrace}", e.Message, e.StackTrace);
                 return BadRequest(e);
             }
         }

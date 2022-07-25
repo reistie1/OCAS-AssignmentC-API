@@ -9,6 +9,11 @@ namespace OCASAPI.Application.Mappings
         public MappingProfiles()
         {
             CreateMap<Address, AddressDto>().ReverseMap();
+            CreateMap<Course, CourseDto>().ReverseMap();
+            CreateMap<Teacher, TeacherDto>().ReverseMap();
+            CreateMap<Student, StudentDto>().ReverseMap();
+            CreateMap<Grade, GradeDto>().ReverseMap();
+
 
         }
 

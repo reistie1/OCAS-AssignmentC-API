@@ -4,5 +4,5 @@ using Microsoft.AspNetCore.Identity;
 namespace OCASAPI.Infrastructure.Models
 {
     [Table("AspNetRoles")]
-    public class Roles : IdentityRole<Guid>{}
+    public class Role : IdentityRole<Guid>{}
 }

@@ -5,9 +5,10 @@ using OCASAPI.Application.Parameters;
 
 public interface ICourseRepository
 {
-    Task<CourseDto> AddCourseAsync(Course course);
-    Task<CourseDto> EditCourseAsync(Course course);
+    Task<Course> AddCourseAsync(Course course);
+    Task<Course> EditCourseAsync(Course course);
     Task<bool> DeleteCourseAsync(Guid courseId);
-    Task<IReadOnlyList<CourseDto>> GetCourseListAsync(Expression<Func<Course, bool>> predicate, RequestParameters requestParams);
+    Task<IReadOnlyList<Course>> GetCourseListAsync(Expression<Func<Course, bool>> predicate, RequestParameters requestParams);
+    Task<Course> GetCourseAsync(Guid CourseId);
 
 }

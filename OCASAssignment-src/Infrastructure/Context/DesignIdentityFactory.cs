@@ -3,17 +3,17 @@ using Microsoft.EntityFrameworkCore.Design;
 
 namespace OCASAPI.Infrastructure.Context
 {
-    public class DesignFactory : IDesignTimeDbContextFactory<ApplicationContext>
+    public class DesignIdentityFactory : IDesignTimeDbContextFactory<IdentityContext>
     {
         private static string DbConnectionString => new DatabaseConfiguration().GetDataConnectionString();
 
-        public ApplicationContext CreateDbContext(string[] args)
+        public IdentityContext CreateDbContext(string[] args)
         {
 
-            var optionsBuilder = new DbContextOptionsBuilder<ApplicationContext>();
+            var optionsBuilder = new DbContextOptionsBuilder<IdentityContext>();
             optionsBuilder.UseSqlServer(DbConnectionString);
 
-            return new ApplicationContext(optionsBuilder.Options);
+            return new IdentityContext(optionsBuilder.Options);
         }
 
     /// <summary>
@@ -36,7 +36,7 @@ namespace OCASAPI.Infrastructure.Context
     /// </summary>
     public class DatabaseConfiguration : ConfigurationBase
     {
-        private string DataConnectionKey = "UserConnection";
+        private string DataConnectionKey = "AuthConnection";
 
         public string GetDataConnectionString()
         {

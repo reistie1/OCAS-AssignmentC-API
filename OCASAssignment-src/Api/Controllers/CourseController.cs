@@ -1,4 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using OCASAPI.Application.DTO.Common;
+using OCASAPI.Application.Features;
+using OCASAPI.Application.Interfaces;
 using OCASAPI.Application.Parameters;
 
 namespace OCASAPI.WebAPI.Controllers
@@ -6,38 +9,97 @@ namespace OCASAPI.WebAPI.Controllers
     [ApiController]
     public class CourseController : BaseAPIController
     {
-        public CourseController()
-        {}
+        private readonly IAppLogger<CourseController> _logger;
 
-        [HttpPost("{SchoolId}")]
-        public async Task<IActionResult> AddSchoolCourse([FromRoute] Guid SchoolId)
+        public CourseController(IAppLogger<CourseController> logger)
         {
-            return Ok();
+            _logger = logger;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddSchoolCourse([FromRoute] CourseDto request)
+        {
+            try
+            {
+                var command = new AddCourseCommand(request);
+                var result = await this._mediator.Send(command);
+
+                return Ok(result);
+            }
+            catch(Exception e)
+            {
+                _logger.LogWarning("Error adding requested course {error} - {stackTrace}", e.Message, e.StackTrace);
+                return BadRequest(e);
+            }
         }
 
 
-        [HttpPatch("{CourseId}")]
-        public async Task<IActionResult> EditSchoolCourse([FromRoute] Guid CourseId)
+        [HttpPatch]
+        public async Task<IActionResult> EditSchoolCourse([FromRoute] CourseDto request)
         {
-            return Ok();
+             try
+            {
+                var command = new EditCourseCommand(request);
+                var result = await this._mediator.Send(command);
+
+                return Ok(result);
+            }
+            catch(Exception e)
+            {
+                _logger.LogWarning("Error editing requested course {error} - {stackTrace}", e.Message, e.StackTrace);
+                return BadRequest(e);
+            }
         }
 
-        [HttpDelete("{CourseId}")]
+        [HttpDelete]
         public async Task<IActionResult> DeleteSchoolCourse([FromRoute] Guid CourseId)
         {
-            return Ok();
+             try
+            {
+                var command = new DeleteCourseCommand(CourseId);
+                var result = await this._mediator.Send(command);
+
+                return Ok(result);
+            }
+            catch(Exception e)
+            {
+                _logger.LogWarning("Error deleting request course {error} - {stackTrace}", e.Message, e.StackTrace);
+                return BadRequest(e);
+            }
         }
 
         [HttpGet("{SchoolId}")]
-        public async Task<IActionResult> GetSchoolCourses([FromRoute] Guid SchoolId, [FromQuery] RequestParameters requestParameters)
+        public async Task<IActionResult> GetSchoolCourses([FromRoute] Guid SchoolId, [FromBody] RequestParameters requestParameters)
         {
-            return Ok();
+            try
+            {
+                var command = new GetCourseListCommand(SchoolId, requestParameters);
+                var result = await this._mediator.Send(command);
+
+                return Ok(result);
+            }
+            catch(Exception e)
+            {
+                _logger.LogWarning("Error fetching course list {error} - {stackTrace}", e.Message, e.StackTrace);
+                return BadRequest(e);
+            }
         }
 
         [HttpGet("{CourseId}")]
         public async Task<IActionResult> GetSchoolCourse([FromRoute] Guid CourseId)
         {
-            return Ok();
+            try
+            {
+                var command = new GetCourseCommand(CourseId);
+                var result = await this._mediator.Send(command);
+
+                return Ok(result);
+            }
+            catch(Exception e)
+            {
+                _logger.LogWarning("Error fetching requested course {error} - {stackTrace}", e.Message, e.StackTrace);
+                return BadRequest(e);
+            }
         }
     }
 }

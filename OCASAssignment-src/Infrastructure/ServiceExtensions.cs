@@ -1,11 +1,17 @@
 
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using OCASAPI.Application.Interfaces;
 using OCASAPI.Application.Wrappers;
 using OCASAPI.Infrastructure.Context;
+using OCASAPI.Infrastructure.LoggingAdapter;
+using OCASAPI.Infrastructure.Models;
+using OCASAPI.Infrastructure.Repositories;
+using OCASAPI.Infrastructure.Services;
 
 namespace OCASAPI.Infrastructure.Extensions
 {
@@ -22,14 +28,24 @@ namespace OCASAPI.Infrastructure.Extensions
         /// <param name="configuration"></param>
         public static void AddIdentityInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            string defaultConnection = "";
-
             services.AddDbContext<ApplicationContext>(options => {
                 options.EnableSensitiveDataLogging();
-                options.UseSqlServer(defaultConnection, b => b.MigrationsAssembly(typeof(ApplicationContext).Assembly.FullName));
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly(typeof(ApplicationContext).Assembly.FullName));
+            });
+
+            services.AddDbContext<IdentityContext>(options => {
+                options.EnableSensitiveDataLogging();
+                options.UseSqlServer(configuration.GetConnectionString("AuthConnection"), b => b.MigrationsAssembly(typeof(IdentityContext).Assembly.FullName));
             });
             
             //#region Services
+            services.AddTransient<ICourseRepository, CourseRepository>();
+            services.AddTransient<IStudentRepository, StudentRepository>();
+            services.AddTransient<ITeacherRepository, TeacherRepository>();
+            services.AddTransient<IGradeRepository, GradeRepository>();
+            services.AddTransient<ISchoolRepository, SchoolRepository>();
+            services.AddScoped<IAccountService, AccountService>();
+            services.AddTransient(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
 
 
             //response caching service
@@ -39,6 +55,9 @@ namespace OCASAPI.Infrastructure.Extensions
                 options.MaximumBodySize = 1024;
             });
 
+            services.AddIdentity<User, Role>().AddEntityFrameworkStores<IdentityContext>().AddDefaultTokenProviders();
+
+
 
             //add authentication defaults for validating Identity Server4 tokens
             services.AddAuthentication(options => {
@@ -47,11 +66,18 @@ namespace OCASAPI.Infrastructure.Extensions
             }).AddJwtBearer(o =>
                 {
                     o.SaveToken = true;
-                    // o.Authority = authority;
-                    // o.Audience = authority + "/resources";
+                    o.Audience = "";
+                    o.Authority = "";
                     o.RequireHttpsMetadata = false; 
-                    //o.TokenValidationParameters = new TokenValidationParameters { RoleClaimType = "role",  ValidateAudience = true, ValidateIssuer = true, ValidIssuer = authority, ValidAudience = authority + "/resources" };
-                    //o.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
+                    o.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateAudience = true,
+                        ValidateIssuer = true,
+                        RoleClaimType = "role",
+                        ValidIssuer = "",
+                        ValidAudience = ""
+                    };
+                    o.TokenValidationParameters.ValidTypes = new[] { "jwt" };
 
                     o.Events = new JwtBearerEvents()
                     {

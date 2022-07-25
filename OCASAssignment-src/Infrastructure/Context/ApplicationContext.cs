@@ -1,7 +1,5 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OCAS.Domain.Common;
-using OCASAPI.Infrastructure.Models;
 
 namespace OCASAPI.Infrastructure.Context
 {
@@ -9,45 +7,20 @@ namespace OCASAPI.Infrastructure.Context
     {
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options){}
 
-        public DbSet<Address> Address;
-        public DbSet<Course> Courses;
-        public DbSet<Grade> Grades;
-        public DbSet<School> Schools; 
-        public DbSet<Student> Students;
-        public DbSet<Teacher> Teachers;
-        public DbSet<Tokens> Tokens;
-        public DbSet<Roles> Roles;
-        public DbSet<User> Users;
+        public virtual DbSet<Address> Address {get; set;}
+        public virtual DbSet<Course> Courses {get; set;}
+        public virtual DbSet<Grade> Grades {get; set;}
+        public virtual DbSet<School> Schools {get; set;} 
+        public virtual DbSet<Student> Students {get; set;}
+        public virtual DbSet<Teacher> Teachers {get; set;}
 
         /// <summary>
-        /// configure database schema for Identity framework entity tables
+        /// configure database schema for identity framework
         /// </summary>
         /// <param name="builder"></param>
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-
-            builder.Entity<IdentityUserClaim<string>>(entity =>
-            {
-                entity.ToTable("UserClaims");
-            });
-
-            builder.Entity<IdentityUserLogin<string>>(entity =>
-            {
-                entity.ToTable("UserLogins"); 
-                entity.HasKey(o => o.UserId);
-            });
-
-            builder.Entity<IdentityRoleClaim<string>>(entity =>
-            {
-                entity.ToTable("RoleClaims");
-            });
-
-            builder.Entity<IdentityUserToken<string>>(entity =>
-            {
-                entity.ToTable("UserTokens");
-                entity.HasKey(o => o.UserId);
-            });
         }
     }
 }

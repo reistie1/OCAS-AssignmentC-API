@@ -1,7 +1,9 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
 
 namespace OCASAPI.Infrastructure.Models
 {
+    [Table("AspNetUsers")]
     public class User : IdentityUser<Guid> 
     {
         public string FirstName {get; set;}
