@@ -49,6 +49,30 @@ namespace OCASAPI.Infrastructure.Repositories
             }
         }
 
+        public async Task<Teacher> AddSchoolTeacherAsync(Teacher teacher)
+        {
+            var existing = await _teachers.Where(t => t.FirstName == teacher.FirstName && t.LastName == teacher.LastName).FirstOrDefaultAsync();
+
+            if(existing != null)
+            {
+                throw new ApiExceptions("A teacher with that name already exists");
+            }
+            else
+            {
+                var addedTeacher = await _teachers.AddAsync(teacher);
+                var result = await _context.SaveChangesAsync();
+
+                if(result > 0)
+                {
+                    return addedTeacher.Entity;
+                }
+                else
+                {
+                    throw new ApiExceptions("Error saving teacher");
+                }
+            }
+        }
+
         public async Task<bool> ChangeCourseTeacherAsync(ChangeTeacherRequest ChangeTeacher)
         {
             var existing = await _context.Courses.Where(s => s.Id == ChangeTeacher.CourseId).FirstOrDefaultAsync();
@@ -74,6 +98,32 @@ namespace OCASAPI.Infrastructure.Repositories
                     return false;
                 }
             }
+        }
+
+        public async Task<bool> DeleteTeacherAsync(Guid teacherId)
+        {
+            var existing = await _teachers.Where(c => c.Id == teacherId).FirstOrDefaultAsync();
+
+            if(existing == null)
+            {
+                throw new ApiExceptions("Teacher not found");
+            }
+            else
+            {
+                _teachers.Remove(existing);
+            }
+
+            var result = await _context.SaveChangesAsync();
+            return true;
+
+            // if(result == 0)
+            // {
+            //     return true;
+            // }
+            // else
+            // {
+            //     return false;
+            // }
         }
 
         public async Task<IReadOnlyList<Teacher>> GetTeacherCoursesAsync(Expression<Func<Teacher, bool>> predicate)
@@ -113,6 +163,35 @@ namespace OCASAPI.Infrastructure.Repositories
                         return false;
                     }
                 }
+            }
+        }
+
+        public async Task<Teacher> UpdateTeacherAsync(Teacher teacher)
+        {
+            var existing = await _teachers.Where(s => s.Id == teacher.Id).FirstOrDefaultAsync();
+
+            if(existing == null)
+            {
+                throw new ApiExceptions("Teacher not found");
+            }
+            else
+            {
+                _context.Entry(existing).CurrentValues.SetValues(new {
+                    FirstName = teacher.FirstName,
+                    LastName = teacher.LastName,
+                    SubjectClassifier = teacher.SubjectClassifier
+                });
+                var result = await _context.SaveChangesAsync();
+                return await _teachers.Where(t => t.Id == teacher.Id).FirstOrDefaultAsync();
+
+
+                // if(result == 0)
+                // {
+                // }
+                // else
+                // {
+                //    throw new ApiExceptions("Error updating teacher");
+                // }
             }
         }
     }

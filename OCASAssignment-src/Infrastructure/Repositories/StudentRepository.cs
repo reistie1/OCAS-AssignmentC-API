@@ -73,6 +73,31 @@ namespace OCASAPI.Infrastructure.Repositories
             }
         }
 
+        public async Task<bool> DeleteStudentAsync(Guid StudentId)
+        {
+            var existing = await _students.Where(c => c.Id == StudentId).FirstOrDefaultAsync();
+
+            if(existing == null)
+            {
+                throw new ApiExceptions("Teacher not found");
+            }
+            else
+            {
+                _students.Remove(existing);
+            }
+
+            var result = await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<IReadOnlyList<Student>> GetSchoolStudents(Guid SchoolId)
+        {
+            return await _students.Where(s => s.SchoolId == SchoolId)
+                .Include(c => c.Courses)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
         public async Task<IReadOnlyList<Student>> GetStudentCoursesAsync(Expression<Func<Student, bool>> predicate)
         {
             return await _students.Where(predicate)
@@ -110,6 +135,27 @@ namespace OCASAPI.Infrastructure.Repositories
                         return false;
                     }
                 }
+            }
+        }
+
+        public async Task<Student> UpdateStudentAsync(Student student)
+        {
+            var existing = await _students.Where(s => s.Id == student.Id).FirstOrDefaultAsync();
+
+            if(existing == null)
+            {
+                throw new ApiExceptions("Teacher not found");
+            }
+            else
+            {
+                _context.Entry(existing).CurrentValues.SetValues(new {
+                    FirstName = student.FirstName,
+                    LastName = student.LastName,
+                    Age = student.Age
+                });
+                
+                var result = await _context.SaveChangesAsync();
+                return await _students.Where(t => t.Id == student.Id).FirstOrDefaultAsync();
             }
         }
     }

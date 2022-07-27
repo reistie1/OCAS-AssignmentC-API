@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using OCASAPI.Application.DTO.Common;
 using OCASAPI.Application.Features;
 using OCASAPI.Application.Interfaces;
-using OCASAPI.Application.Parameters;
 
 namespace OCASAPI.WebAPI.Controllers
 {
@@ -36,6 +35,23 @@ namespace OCASAPI.WebAPI.Controllers
             }
         }
 
+        [HttpGet("{SchoolId}")]
+        public async Task<IActionResult> GetStudents([FromRoute] Guid SchoolId)
+        {
+            try
+            {
+                var command = new GetSchoolStudentsCommand(SchoolId);
+                var result = await _mediator.Send(command);
+
+                return Ok(result);
+            }
+            catch(Exception e)
+            {
+                _logger.LogWarning("Error adding school student {error} - {stackTrace}", e.Message, e.StackTrace);
+                return BadRequest(e);
+            }
+        }
+
         [HttpPost("course/{StudentId}")]
         public async Task<IActionResult> AddCourse([FromRoute] Guid StudentId, [FromQuery] Guid courseId)
         {
@@ -53,12 +69,46 @@ namespace OCASAPI.WebAPI.Controllers
             }
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> RemoveCourse([FromQuery] Guid CourseId)
+        [HttpPatch]
+        public async Task<IActionResult> UpdateStudent([FromBody] StudentDto Student)
+        {
+            try
+            {
+                var command = new UpdateSchoolStudentCommand(Student);
+                var result = await _mediator.Send(command);
+
+                return Ok(result);
+            }
+            catch(Exception e)
+            {
+                _logger.LogWarning("Error updating student to course {error} - {stackTrace}", e.Message, e.StackTrace);
+                return BadRequest(e);
+            }
+        }
+
+        [HttpDelete("course/{CourseId}")]
+        public async Task<IActionResult> RemoveCourse([FromRoute] Guid CourseId)
         {
             try
             {
                 var command = new DeleteCourseCommand(CourseId);
+                var result = await _mediator.Send(command);
+
+                return Ok(result);
+            }
+            catch(Exception e)
+            {
+                _logger.LogWarning("Error removing school course {error} - {stackTrace}", e.Message, e.StackTrace);
+                return BadRequest(e);
+            }
+        }
+
+        [HttpDelete("{StudentId}")]
+        public async Task<IActionResult> RemoveStudent([FromRoute] Guid StudentId)
+        {
+            try
+            {
+                var command = new DeleteSchoolStudentCourseCommand(StudentId);
                 var result = await _mediator.Send(command);
 
                 return Ok(result);
