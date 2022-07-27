@@ -20,7 +20,7 @@ namespace OCASAPI.Application.Validators
             RuleFor(c => c.Course.Description)
                 .NotEmpty().WithMessage("Course description must not be empty")
                 .MaximumLength(255).WithMessage("Course description must not have length greater than 255 characters")
-                .Matches(@"^[A-Za-z\s-_*.,']+$").WithMessage("Course description contains an invalid character.");
+                .Matches(@"^[A-Za-z0-9\s-_*.,']+$").WithMessage("Course description contains an invalid character.");
         }
     }
 }

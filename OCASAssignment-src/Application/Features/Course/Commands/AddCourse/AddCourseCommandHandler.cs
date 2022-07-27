@@ -22,7 +22,6 @@ namespace OCASAPI.Application.Features
         public async Task<Response<CourseDto>> Handle(AddCourseCommand request, CancellationToken cancellationToken)
         {
             var result = await _courseRepository.AddCourseAsync(_mapper.Map<Course>(request.Course));
-
             return new Response<CourseDto>(_mapper.Map<CourseDto>(request.Course));
         }
     }

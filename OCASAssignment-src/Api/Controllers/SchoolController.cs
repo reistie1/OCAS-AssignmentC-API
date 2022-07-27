@@ -1,4 +1,5 @@
 
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using OCASAPI.Application.DTO.Requests;
 using OCASAPI.Application.Features;
@@ -11,9 +12,10 @@ namespace OCASAPI.WebAPI.Controllers
     {
         private readonly IAppLogger<SchoolController> _logger;
 
-        public SchoolController(IAppLogger<SchoolController> logger)
+        public SchoolController(IAppLogger<SchoolController> logger, IMediator mediator)
         {
             _logger = logger;
+            _mediator = mediator;
         }
 
 
@@ -23,7 +25,7 @@ namespace OCASAPI.WebAPI.Controllers
             try
             {
                 var command = new UpdateSchoolInformationCommand(request);
-                var result = await this._mediator.Send(command);
+                var result = await _mediator.Send(command);
 
                 return Ok(result);
             }
@@ -34,13 +36,13 @@ namespace OCASAPI.WebAPI.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetSchoolInformation([FromQuery] Guid SchoolId)
+        [HttpGet("{SchoolId}")]
+        public async Task<IActionResult> GetSchoolInformation([FromRoute] Guid SchoolId)
         {
             try
             {
                 var command = new GetSchoolInformationCommand(SchoolId);
-                var result = await this._mediator.Send(command);
+                var result = await _mediator.Send(command);
 
                 return Ok(result);
             }

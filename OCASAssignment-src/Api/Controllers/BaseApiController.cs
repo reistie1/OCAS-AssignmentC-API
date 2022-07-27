@@ -7,7 +7,7 @@ namespace OCASAPI.WebAPI.Controllers
     [Route("api/v1/[controller]")]
     public abstract class BaseAPIController : ControllerBase
     {
-        public IMediator _mediator;
-        protected IMediator Mediator => _mediator ??= HttpContext.RequestServices.GetService<IMediator>();
+        public ISender _mediator;
+        protected ISender Mediator => _mediator ??= HttpContext.RequestServices.GetService<ISender>();
     }
 }

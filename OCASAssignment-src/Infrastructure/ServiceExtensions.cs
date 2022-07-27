@@ -1,10 +1,12 @@
 
 
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using OCASAPI.Application.DTO.Requests;
 using OCASAPI.Application.Interfaces;
 using OCASAPI.Application.Wrappers;
 using OCASAPI.Infrastructure.Context;
@@ -56,6 +58,28 @@ namespace OCASAPI.Infrastructure.Extensions
             });
 
             services.AddIdentity<User, Role>().AddEntityFrameworkStores<IdentityContext>().AddDefaultTokenProviders();
+
+            services.Configure<IdentityOptions>(options => 
+            {
+                // Password settings.
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequiredLength = 8; 
+                options.Password.RequiredUniqueChars = 1;
+
+                // Lockout settings.
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromHours(1);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.AllowedForNewUsers = false;
+
+                // User settings.
+                options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+!$*^";
+                options.User.RequireUniqueEmail = true;
+            });
+
+            services.AddTransient<IValidator<RegistrationRequest>, RegistrationRequestValidator>();
 
 
 

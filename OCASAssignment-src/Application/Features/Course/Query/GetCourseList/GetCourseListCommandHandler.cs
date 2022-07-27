@@ -23,7 +23,7 @@ namespace OCASAPI.Application.Features
         {
             var result = await _courseRepository.GetCourseListAsync(c => c.SchoolId == request.SchoolId, request.RequestParameters);
 
-            return new Response<IReadOnlyList<CourseDto>>(_mapper.Map<IReadOnlyList<CourseDto>>(request));
+            return new Response<IReadOnlyList<CourseDto>>(_mapper.Map<IReadOnlyList<CourseDto>>(result));
         }
     }
 }

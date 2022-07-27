@@ -23,7 +23,7 @@ namespace OCASAPI.Application.Features
         {
             var result = await _courseRepository.GetCourseAsync(request.CourseId);
 
-            return new Response<CourseDto>(_mapper.Map<CourseDto>(request));
+            return new Response<CourseDto>(_mapper.Map<CourseDto>(result));
         }
     }
 }

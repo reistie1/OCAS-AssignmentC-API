@@ -7,11 +7,15 @@ namespace OCASAPI.Application.Wrappers
     /// happened while processing the request.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class PagedResponse<T> : Response<T>
+    public class PagedResponse<T>
     {
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
         public int TotalPages {get; set;}
+        public bool Succeeded { get; set; }
+        public string Message { get; set; }
+        public List<string> Errors { get; set; }
+        public T Data { get; set; }
 
         public PagedResponse(T data, int pageNumber, int pageSize, int TotalPages)
         {

@@ -1,3 +1,4 @@
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using OCASAPI.Application.DTO.Common;
 using OCASAPI.Application.Features;
@@ -11,36 +12,37 @@ namespace OCASAPI.WebAPI.Controllers
     {
         private readonly IAppLogger<CourseController> _logger;
 
-        public CourseController(IAppLogger<CourseController> logger)
+        public CourseController(IAppLogger<CourseController> logger, IMediator mediator)
         {
             _logger = logger;
+            _mediator = mediator;
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddSchoolCourse([FromRoute] CourseDto request)
+        public async Task<IActionResult> AddSchoolCourse([FromBody] CourseDto request)
         {
             try
             {
                 var command = new AddCourseCommand(request);
-                var result = await this._mediator.Send(command);
+                var result = await _mediator.Send(command);
 
                 return Ok(result);
             }
             catch(Exception e)
             {
-                _logger.LogWarning("Error adding requested course {error} - {stackTrace}", e.Message, e.StackTrace);
+                _logger.LogWarning("Error adding requested course {error} - {stackTrace} - {innerException}", e.Message, e.StackTrace, e.InnerException);
                 return BadRequest(e);
             }
         }
 
 
         [HttpPatch]
-        public async Task<IActionResult> EditSchoolCourse([FromRoute] CourseDto request)
+        public async Task<IActionResult> EditSchoolCourse([FromBody] CourseDto request)
         {
-             try
+            try
             {
                 var command = new EditCourseCommand(request);
-                var result = await this._mediator.Send(command);
+                var result = await _mediator.Send(command);
 
                 return Ok(result);
             }
@@ -51,13 +53,13 @@ namespace OCASAPI.WebAPI.Controllers
             }
         }
 
-        [HttpDelete]
+        [HttpDelete("{CourseId}")]
         public async Task<IActionResult> DeleteSchoolCourse([FromRoute] Guid CourseId)
         {
-             try
+            try
             {
                 var command = new DeleteCourseCommand(CourseId);
-                var result = await this._mediator.Send(command);
+                var result = await _mediator.Send(command);
 
                 return Ok(result);
             }
@@ -68,13 +70,13 @@ namespace OCASAPI.WebAPI.Controllers
             }
         }
 
-        [HttpGet("{SchoolId}")]
+        [HttpPost("list/{SchoolId}")]
         public async Task<IActionResult> GetSchoolCourses([FromRoute] Guid SchoolId, [FromBody] RequestParameters requestParameters)
         {
             try
             {
                 var command = new GetCourseListCommand(SchoolId, requestParameters);
-                var result = await this._mediator.Send(command);
+                var result = await _mediator.Send(command);
 
                 return Ok(result);
             }
@@ -91,7 +93,7 @@ namespace OCASAPI.WebAPI.Controllers
             try
             {
                 var command = new GetCourseCommand(CourseId);
-                var result = await this._mediator.Send(command);
+                var result = await _mediator.Send(command);
 
                 return Ok(result);
             }

@@ -17,7 +17,7 @@ namespace OCASAPI.Infrastructure.Repositories
 
         public async Task<School> GetSchoolInformationAsync(Guid SchoolId)
         {
-            var existing = await _school.Where(s => s.Id == SchoolId).FirstOrDefaultAsync();
+            var existing = await _school.Where(s => s.Id == SchoolId).Include(s => s.Address).FirstOrDefaultAsync();
 
             if(existing == null)
             {
@@ -31,7 +31,7 @@ namespace OCASAPI.Infrastructure.Repositories
 
         public async Task<School> UpdateSchoolInformationAsync(School school)
         {
-            var existing = await _school.Where(s => s.Id == school.Id).FirstOrDefaultAsync();
+            var existing = await _school.Where(s => s.Id == school.Id).Include(s => s.Address).FirstOrDefaultAsync();
 
             if(existing == null)
             {
@@ -44,14 +44,14 @@ namespace OCASAPI.Infrastructure.Repositories
 
                 var result = await _context.SaveChangesAsync();
 
-                if(result == 0)
-                {
+                // if(result < 0)
+                // {
                     return await this.GetSchoolInformationAsync(school.Id);
-                }
-                else
-                {
-                    throw new ApiExceptions("Error saving school");
-                }
+                // }
+                // else
+                // {
+                //     throw new ApiExceptions("Error saving school");
+                // }
             }
         }
     }

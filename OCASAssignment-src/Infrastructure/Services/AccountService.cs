@@ -68,6 +68,7 @@ namespace OCASAPI.Infrastructure.Services
         {
             var address = new Address()
             {
+                Id = Guid.NewGuid(),
                 Address1 = request.Address.Address1,
                 Address2 = request.Address.Address2,
                 City = request.Address.City,
@@ -75,35 +76,23 @@ namespace OCASAPI.Infrastructure.Services
                 Province = request.Address.Province
             };
 
-            var registration = new School()
+            var school = new School()
             {
+                Id = Guid.NewGuid(),
                 Name = request.Name,
                 Address = address
             };
 
-            await _appcontext.AddAsync(registration);
-
-            var result = await _appcontext.SaveChangesAsync();
-
-            if(result == 0)
-            {
-                throw new ApiExceptions("Error registering.");
-            }
-            else
-            {
-                return new Response<bool>(true);
-            }
-        }
-
-        public async Task<Response<bool>> RegisterUser(RegisterUserRequest request)
-        {
             var newUser = new User()
             {
                 Id = Guid.NewGuid(),
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 PhoneNumber = request.PhoneNumber,
-                Role = request.Role
+                Role = request.Role,
+                Email = request.Email,
+                UserName = request.Email,
+                SchoolId = school.Id
             };
 
             IdentityResult userResult = await _userManager.CreateAsync(newUser, request.DefaultPassword);
@@ -115,8 +104,18 @@ namespace OCASAPI.Infrastructure.Services
             }
             else
             {
-                IdentityResult result = await _userManager.AddClaimAsync(newUser, new Claim(ClaimTypes.Role, request.Role));
+                await _userManager.AddClaimAsync(newUser, new Claim(ClaimTypes.Role, request.Role));
+            }
 
+            await _appcontext.AddAsync(school);
+            var result = await _appcontext.SaveChangesAsync();
+
+            if(result == 0)
+            {
+                throw new ApiExceptions("Error registering.");
+            }
+            else
+            {
                 return new Response<bool>(true);
             }
         }

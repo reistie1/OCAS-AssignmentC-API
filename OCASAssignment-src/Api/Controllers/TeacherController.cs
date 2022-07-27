@@ -1,4 +1,5 @@
 
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using OCASAPI.Application.DTO.Requests;
 using OCASAPI.Application.Features;
@@ -11,9 +12,10 @@ namespace OCASAPI.WebAPI.Controllers
     {
         private readonly IAppLogger<StudentController> _logger;
 
-        public TeacherController(IAppLogger<StudentController> logger)
+        public TeacherController(IAppLogger<StudentController> logger, IMediator mediator)
         {
             _logger = logger;
+            _mediator = mediator;
         }
 
         [HttpPost("{CourseId}")]

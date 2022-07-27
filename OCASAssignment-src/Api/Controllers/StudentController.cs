@@ -1,4 +1,5 @@
 
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using OCASAPI.Application.DTO.Common;
 using OCASAPI.Application.Features;
@@ -12,24 +13,42 @@ namespace OCASAPI.WebAPI.Controllers
     {
         private readonly IAppLogger<StudentController> _logger;
 
-        public StudentController(IAppLogger<StudentController> logger)
+        public StudentController(IAppLogger<StudentController> logger, IMediator mediator)
         {
             _logger = logger;
+            _mediator = mediator;
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddCourse([FromBody] CourseDto Course)
+        public async Task<IActionResult> AddStudent([FromBody] StudentDto Student)
         {
             try
             {
-                var command = new AddCourseCommand(Course);
-                var result = await this._mediator.Send(command);
+                var command = new AddSchoolStudentCommand(Student);
+                var result = await _mediator.Send(command);
 
                 return Ok(result);
             }
             catch(Exception e)
             {
-                _logger.LogWarning("Error adding school course {error} - {stackTrace}", e.Message, e.StackTrace);
+                _logger.LogWarning("Error adding school student {error} - {stackTrace}", e.Message, e.StackTrace);
+                return BadRequest(e);
+            }
+        }
+
+        [HttpPost("course/{StudentId}")]
+        public async Task<IActionResult> AddCourse([FromRoute] Guid StudentId, [FromQuery] Guid courseId)
+        {
+            try
+            {
+                var command = new AddStudentCourseCommand(StudentId, courseId);
+                var result = await _mediator.Send(command);
+
+                return Ok(result);
+            }
+            catch(Exception e)
+            {
+                _logger.LogWarning("Error adding student to course {error} - {stackTrace}", e.Message, e.StackTrace);
                 return BadRequest(e);
             }
         }
@@ -40,7 +59,7 @@ namespace OCASAPI.WebAPI.Controllers
             try
             {
                 var command = new DeleteCourseCommand(CourseId);
-                var result = await this._mediator.Send(command);
+                var result = await _mediator.Send(command);
 
                 return Ok(result);
             }
@@ -51,13 +70,13 @@ namespace OCASAPI.WebAPI.Controllers
             }
         }
 
-        [HttpPost("/enrolled/{SchoolId}")]
-        public async Task<IActionResult> GetEnrolledCourses([FromRoute] Guid SchoolId, [FromBody] RequestParameters requestParameters)
+        [HttpGet("enrolled/{StudentId}")]
+        public async Task<IActionResult> GetEnrolledCourses([FromRoute] Guid StudentId)
         {
             try
             {
-                var command = new GetCourseListCommand(SchoolId, requestParameters);
-                var result = await this._mediator.Send(command);
+                var command = new GetStudentCoursesCommand(StudentId);
+                var result = await _mediator.Send(command);
 
                 return Ok(result);
             }

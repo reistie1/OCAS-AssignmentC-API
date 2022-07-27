@@ -4,6 +4,7 @@ namespace OCAS.Domain.Common
     {
         public string FirstName {get; set;}
         public string LastName {get; set;}
+        public Guid? SchoolId {get; set;}
         public int Age {get; set;}
         public IList<Course> Courses {get; set;}
         public IList<Grade> Grades {get; set;}

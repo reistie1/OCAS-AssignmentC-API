@@ -12,7 +12,7 @@ using OCASAPI.Infrastructure.Context;
 namespace Backend.Infrastructure.Migrations.Identity
 {
     [DbContext(typeof(IdentityContext))]
-    [Migration("20220725211523_InitialMigration")]
+    [Migration("20220725232443_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

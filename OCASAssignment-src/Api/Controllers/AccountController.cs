@@ -27,24 +27,8 @@ namespace OCASAPI.WebAPI.Controllers
             }
             catch(Exception e)
             {
+                Console.WriteLine(e.InnerException);
                 _logger.LogWarning("Error registering school {error} - {stackTrace}", e.Message, e.StackTrace);
-                return BadRequest(e);
-            }
-            
-        }
-
-        [HttpPost("/register-user")]
-        public async Task<IActionResult> RegisterUser([FromBody] RegisterUserRequest request)
-        {
-            try
-            {
-                var result = await _accountService.RegisterUser(request);
-
-                return Ok(result);
-            }
-            catch(Exception e)
-            {
-                _logger.LogWarning("Error registering user {error} - {stackTrace}", e.Message, e.StackTrace);
                 return BadRequest(e);
             }
             

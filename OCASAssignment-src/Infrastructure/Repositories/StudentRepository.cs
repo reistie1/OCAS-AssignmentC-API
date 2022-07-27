@@ -49,6 +49,30 @@ namespace OCASAPI.Infrastructure.Repositories
             }
         }
 
+        public async Task<Student> AddStudentAsync(Student student)
+        {
+            var existing = await _students.Where(s => s.Id == student.Id).FirstOrDefaultAsync();
+
+            if(existing != null)
+            {
+                throw new ApiExceptions("Student not found");
+            }
+            else
+            {
+                var newStudent = await _students.AddAsync(student);
+                var result = await _context.SaveChangesAsync();
+
+                if(result > 0)
+                {
+                    return newStudent.Entity;
+                }
+                else
+                {
+                    throw new ApiExceptions("Error adding student");
+                }
+            }
+        }
+
         public async Task<IReadOnlyList<Student>> GetStudentCoursesAsync(Expression<Func<Student, bool>> predicate)
         {
             return await _students.Where(predicate)

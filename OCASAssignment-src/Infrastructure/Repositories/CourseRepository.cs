@@ -35,6 +35,7 @@ namespace OCASAPI.Infrastructure.Repositories
             }
             else
             {
+                Console.WriteLine("here");
                 throw new ApiExceptions("Error saving course");
             }
         }
