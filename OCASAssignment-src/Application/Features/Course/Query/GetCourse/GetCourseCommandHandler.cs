@@ -1,6 +1,5 @@
 using AutoMapper;
 using MediatR;
-using OCAS.Domain.Common;
 using OCASAPI.Application.DTO.Common;
 using OCASAPI.Application.Wrappers;
 

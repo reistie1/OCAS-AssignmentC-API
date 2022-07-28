@@ -4,7 +4,7 @@ using OCASAPI.Application.Wrappers;
 
 namespace OCASAPI.Application.Features
 {
-    public class DeleteStudentGradeCommand : IRequest<Response<GradeDto>>
+    public class DeleteStudentGradeCommand : IRequest<Response<bool>>
     {
         public DeleteStudentGradeCommand(Guid studentId, Guid courseId)
         {
