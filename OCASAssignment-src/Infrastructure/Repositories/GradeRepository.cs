@@ -16,9 +16,9 @@ namespace OCASAPI.Infrastructure.Repositories
         }
 
 
-        public async Task<Grade> AddStudentGradeAsync(Guid StudentId, Grade grade)
+        public async Task<Grade> AddStudentGradeAsync(Grade grade)
         {
-            var existing = await _grades.Where(c => c.StudentId == StudentId).FirstOrDefaultAsync();
+            var existing = await _grades.Where(c => c.StudentId == grade.StudentId && c.CourseId == grade.CourseId).FirstOrDefaultAsync();
 
             if(existing != null)
             {
@@ -40,7 +40,7 @@ namespace OCASAPI.Infrastructure.Repositories
 
         public async Task<bool> DeleteStudentGradeAsync(Guid StudentId, Guid CourseId)
         {
-            var existing = await _grades.Where(c => c.Id == CourseId && c.StudentId == StudentId).FirstOrDefaultAsync();
+            var existing = await _grades.Where(c => c.CourseId == CourseId && c.StudentId == StudentId).FirstOrDefaultAsync();
 
             if(existing == null)
             {
@@ -53,7 +53,7 @@ namespace OCASAPI.Infrastructure.Repositories
 
             var result = await _context.SaveChangesAsync();
 
-            if(result == 0)
+            if(result == 1)
             {
                 return true;
             }
@@ -86,9 +86,9 @@ namespace OCASAPI.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task<Grade> UpdateStudentGradeAsync(Guid StudentId, Grade grade)
+        public async Task<Grade> UpdateStudentGradeAsync(Grade grade)
         {
-            var existing = await _grades.Where(c => c.StudentId == StudentId).FirstOrDefaultAsync();
+            var existing = await _grades.Where(c => c.StudentId == grade.StudentId && c.CourseId == grade.CourseId).FirstOrDefaultAsync();
 
             if(existing == null)
             {
@@ -104,7 +104,7 @@ namespace OCASAPI.Infrastructure.Repositories
 
             if(result > 0)
             {
-                return await this.GetStudentCourseGradeAsync(StudentId, grade.CourseId);
+                return await this.GetStudentCourseGradeAsync(grade.StudentId, grade.CourseId);
             }
             else
             {

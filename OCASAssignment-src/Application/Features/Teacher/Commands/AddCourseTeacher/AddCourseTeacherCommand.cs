@@ -4,7 +4,7 @@ using OCASAPI.Application.Wrappers;
 
 namespace OCASAPI.Application.Features
 {
-    public class AddCourseTeacherCommand : IRequest<Response<TeacherDto>>
+    public class AddCourseTeacherCommand : IRequest<Response<bool>>
     {
         public AddCourseTeacherCommand(Guid courseId, Guid teacherId)
         {

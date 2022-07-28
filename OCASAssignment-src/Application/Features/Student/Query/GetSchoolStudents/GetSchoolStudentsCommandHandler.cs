@@ -19,7 +19,7 @@ namespace OCASAPI.Application.Features
 
         public async Task<Response<IReadOnlyList<StudentDto>>> Handle(GetSchoolStudentsCommand request, CancellationToken cancellationToken)
         {
-            var result = await _studentRepository.GetSchoolStudents(request.SchoolId);
+            var result = await _studentRepository.GetSchoolStudentsAsync(s => s.SchoolId == request.SchoolId);
 
             return new Response<IReadOnlyList<StudentDto>>(_mapper.Map<IReadOnlyList<StudentDto>>(result));
         }

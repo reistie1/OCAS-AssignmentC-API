@@ -19,7 +19,7 @@ namespace OCASAPI.Application.Features
 
         public async Task<Response<GradeDto>> Handle(UpdateStudentGradeCommand request, CancellationToken cancellationToken)
         {
-            var result = await _gradeRepository.UpdateStudentGradeAsync(request.StudentId, _mapper.Map<Grade>(request.Grade));
+            var result = await _gradeRepository.UpdateStudentGradeAsync(_mapper.Map<Grade>(request.Grade));
 
             return new Response<GradeDto>(_mapper.Map<GradeDto>(result));
         }

@@ -5,7 +5,7 @@ using OCASAPI.Application.Wrappers;
 
 namespace OCASAPI.Application.Features
 {
-    public class ChangeCourseTeacherCommand : IRequest<Response<TeacherDto>>
+    public class ChangeCourseTeacherCommand : IRequest<Response<bool>>
     {
         public ChangeCourseTeacherCommand(ChangeTeacherRequest teacherChange)
         {

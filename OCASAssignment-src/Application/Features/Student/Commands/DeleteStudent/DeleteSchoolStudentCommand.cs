@@ -3,9 +3,9 @@ using OCASAPI.Application.Wrappers;
 
 namespace OCASAPI.Application.Features
 {
-    public class DeleteSchoolStudentCourseCommand : IRequest<Response<bool>>
+    public class DeleteSchoolStudentCommand : IRequest<Response<bool>>
     {
-        public DeleteSchoolStudentCourseCommand(Guid studentId)
+        public DeleteSchoolStudentCommand(Guid studentId)
         {
             StudentId = studentId;
         }

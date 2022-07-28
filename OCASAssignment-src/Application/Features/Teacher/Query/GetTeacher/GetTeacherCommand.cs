@@ -1,13 +1,12 @@
 using MediatR;
 using OCASAPI.Application.DTO.Common;
-using OCASAPI.Application.DTO.Requests;
 using OCASAPI.Application.Wrappers;
 
 namespace OCASAPI.Application.Features
 {
-    public class GetTeacherCoursesCommand : IRequest<Response<IReadOnlyList<TeacherDto>>>
+    public class GetTeacherCommand : IRequest<Response<TeacherDto>>
     {
-        public GetTeacherCoursesCommand(Guid teacherId)
+        public GetTeacherCommand(Guid teacherId)
         {
             TeacherId = teacherId;
         }

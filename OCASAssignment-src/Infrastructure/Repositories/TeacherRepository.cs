@@ -126,12 +126,14 @@ namespace OCASAPI.Infrastructure.Repositories
             // }
         }
 
-        public async Task<IReadOnlyList<Teacher>> GetTeacherCoursesAsync(Expression<Func<Teacher, bool>> predicate)
+        public async Task<IReadOnlyList<Teacher>> GetSchoolTeachersAsync(Expression<Func<Teacher, bool>> predicate)
         {
-            return await _teachers.Where(predicate)
-                .Include(c => c.Courses)
-                .AsNoTracking()
-                .ToListAsync();
+            return await _teachers.Where(predicate).Include(c => c.Courses).AsNoTracking().ToListAsync();
+        }
+
+        public async Task<Teacher> GetTeacherAsync(Guid TeacherId)
+        {
+            return await _teachers.Where(t => t.Id == TeacherId).Include(c => c.Courses).FirstOrDefaultAsync();
         }
 
         public async Task<bool> RemoveCourseTeacherAsync(Guid TeacherId, Guid CourseId)

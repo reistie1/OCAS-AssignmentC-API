@@ -37,7 +37,7 @@ namespace OCASAPI.Infrastructure.Repositories
 
                     var result = await _context.SaveChangesAsync();
 
-                    if(result == 0)
+                    if(result == 1)
                     {
                         return true;
                     }
@@ -49,6 +49,7 @@ namespace OCASAPI.Infrastructure.Repositories
             }
         }
 
+        //fix this one
         public async Task<Student> AddStudentAsync(Student student)
         {
             var existing = await _students.Where(s => s.Id == student.Id).FirstOrDefaultAsync();
@@ -90,20 +91,23 @@ namespace OCASAPI.Infrastructure.Repositories
             return true;
         }
 
-        public async Task<IReadOnlyList<Student>> GetSchoolStudents(Guid SchoolId)
+        public async Task<IReadOnlyList<Student>> GetSchoolStudentsAsync(Expression<Func<Student, bool>> predicate)
         {
-            return await _students.Where(s => s.SchoolId == SchoolId)
-                .Include(c => c.Courses)
-                .AsNoTracking()
-                .ToListAsync();
+            return await _students.Where(predicate).Include(c => c.Courses).AsNoTracking().ToListAsync();
         }
 
-        public async Task<IReadOnlyList<Student>> GetStudentCoursesAsync(Expression<Func<Student, bool>> predicate)
+        public async Task<Student> GetStudentAsync(Guid StudentId)
         {
-            return await _students.Where(predicate)
-                .Include(c => c.Courses)
-                .AsNoTracking()
-                .ToListAsync();
+            var existing = await _students.Where(s => s.Id == StudentId).Include(c => c.Courses).FirstOrDefaultAsync();
+
+            if(existing == null)
+            {
+                throw new ApiExceptions("No Student was found");
+            }
+            else
+            {
+                return existing;
+            }
         }
 
         public async Task<bool> RemoveCourseAsync(Guid StudentId, Guid CourseId)
@@ -126,7 +130,7 @@ namespace OCASAPI.Infrastructure.Repositories
 
                     var result = await _context.SaveChangesAsync();
 
-                    if(result == 0)
+                    if(result == 1)
                     {
                         return true;
                     }

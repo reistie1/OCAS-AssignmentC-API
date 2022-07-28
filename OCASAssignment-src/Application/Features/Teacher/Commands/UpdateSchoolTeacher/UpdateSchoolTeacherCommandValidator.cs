@@ -3,9 +3,9 @@ using OCASAPI.Application.Features;
 
 namespace OCASAPI.Application.Validators
 {
-    public class AddSchoolTeacherCommandValidator : AbstractValidator<AddSchoolTeacherCommand>
+    public class UpdateSchoolTeacherCommandValidator : AbstractValidator<UpdateSchoolTeacherCommand>
     {
-        public AddSchoolTeacherCommandValidator()
+        public UpdateSchoolTeacherCommandValidator()
         {
             RuleFor(c => c.Teacher.FirstName)
                 .NotEmpty().WithMessage("First name must not be empty")

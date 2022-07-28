@@ -37,18 +37,18 @@ namespace OCASAPI.WebAPI.Controllers
         }
 
         [HttpGet("{TeacherId}")]
-        public async Task<IActionResult> GetTeacherCourses([FromRoute] Guid TeacherId)
+        public async Task<IActionResult> GetSchoolTeacher([FromRoute] Guid TeacherId)
         {
             try
             {
-                var command = new GetTeacherCoursesCommand(TeacherId);
+                var command = new GetTeacherCommand(TeacherId);
                 var result = await _mediator.Send(command);
 
                 return Ok(result);
             }
             catch(Exception e)
             {
-                _logger.LogWarning("Error fetching teacher courses {error} - {stackTrace}", e.Message, e.StackTrace);
+                _logger.LogWarning("Error fetching teacher {error} - {stackTrace}", e.Message, e.StackTrace);
                 return BadRequest(e);
             }
         }

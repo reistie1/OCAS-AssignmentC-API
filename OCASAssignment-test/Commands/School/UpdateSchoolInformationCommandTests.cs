@@ -62,11 +62,18 @@ namespace OCASAPI_Tests.Commands
         [Fact]
         public async Task UpdateSchoolInformationCommand_ValidatesEntityPropertiesCorrectly()
         {
-            var command = new UpdateSchoolInformationCommand(new SchoolInfoRequest());
+            var command = new UpdateSchoolInformationCommand(new SchoolInfoRequest(){
+                Address = new AddressDto
+                {
+
+                },
+                Name = "#######"
+            });
+
             var validator = new UpdateSchoolInformationCommandValidator();
             var result = await validator.ValidateAsync(command);
 
-            Assert.Equal(1, result.Errors.Count);
+            Assert.Equal(5, result.Errors.Count);
         }
     }
 }

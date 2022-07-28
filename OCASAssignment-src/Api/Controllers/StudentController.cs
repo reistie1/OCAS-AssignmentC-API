@@ -108,7 +108,7 @@ namespace OCASAPI.WebAPI.Controllers
         {
             try
             {
-                var command = new DeleteSchoolStudentCourseCommand(StudentId);
+                var command = new DeleteSchoolStudentCommand(StudentId);
                 var result = await _mediator.Send(command);
 
                 return Ok(result);
@@ -125,7 +125,7 @@ namespace OCASAPI.WebAPI.Controllers
         {
             try
             {
-                var command = new GetStudentCoursesCommand(StudentId);
+                var command = new GetStudentCommand(StudentId);
                 var result = await _mediator.Send(command);
 
                 return Ok(result);

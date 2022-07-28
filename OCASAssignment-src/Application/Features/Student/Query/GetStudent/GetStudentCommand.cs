@@ -4,9 +4,9 @@ using OCASAPI.Application.Wrappers;
 
 namespace OCASAPI.Application.Features
 {
-    public class GetStudentCoursesCommand : IRequest<Response<IReadOnlyList<StudentDto>>>
+    public class GetStudentCommand : IRequest<Response<StudentDto>>
     {
-        public GetStudentCoursesCommand(Guid studentId)
+        public GetStudentCommand(Guid studentId)
         {
             StudentId = studentId;
         }

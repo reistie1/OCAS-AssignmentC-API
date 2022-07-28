@@ -9,7 +9,7 @@ using OCASAPI.Application.Validators;
 
 namespace OCASAPI_Tests.Commands
 {
-    public class AddStudentGradeCommandTests
+    public class UpdateStudentGradeCommandTests
     {
         private readonly Mock<IGradeRepository> _mockGradeRepo;
         private readonly Mock<IMapper> _mockMapper;
@@ -17,7 +17,7 @@ namespace OCASAPI_Tests.Commands
         private readonly GradeDto _mappedGradeDto;
         private readonly Grade _mappedGrade;
 
-        public AddStudentGradeCommandTests()
+        public UpdateStudentGradeCommandTests()
         {
             Guid courseId = Guid.NewGuid();
             Guid StudentId = Guid.NewGuid();
@@ -27,7 +27,7 @@ namespace OCASAPI_Tests.Commands
 
             _sampleData = new SampleData();
             _mockGradeRepo = new Mock<IGradeRepository>();
-            _mockGradeRepo.Setup(c => c.AddStudentGradeAsync(_mappedGrade)).ReturnsAsync(_mappedGrade);
+            _mockGradeRepo.Setup(c => c.UpdateStudentGradeAsync(_mappedGrade)).ReturnsAsync(_mappedGrade);
             
             
             _mockMapper = new Mock<IMapper>();
@@ -37,10 +37,10 @@ namespace OCASAPI_Tests.Commands
         }
 
         [Fact]
-        public async Task AddStudentGradeCommand_ReturnsAddedCourseEntity()
+        public async Task UpdateStudentGradeCommand_ReturnsUpdatedStudentEntity()
         {
-            var command = new AddStudentGradeCommand(_mappedGradeDto.StudentId, _mappedGradeDto);
-            var handler = new AddStudentGradeCommandHandler(_mockMapper.Object, _mockGradeRepo.Object);
+            var command = new UpdateStudentGradeCommand(_mappedGradeDto.StudentId, _mappedGradeDto);
+            var handler = new UpdateStudentGradeCommandHandler(_mockMapper.Object, _mockGradeRepo.Object);
             var result = await handler.Handle(command, CancellationToken.None);
 
             Assert.IsType<Response<GradeDto>>(result);
@@ -49,14 +49,18 @@ namespace OCASAPI_Tests.Commands
         }
 
         [Fact]
-        public async Task AddStudentGradeCommand_ValidatesProperties()
+        public async Task UpdateStudentGradeCommand_ValidatesProperties()
         {
-            GradeDto gradeDto = new GradeDto();
-            var command = new AddStudentGradeCommand(gradeDto.StudentId, gradeDto);
-            var validator = new AddStudentGradeCommandValidator();
+            GradeDto gradeDto = new GradeDto(){
+                NumericGrade = 101,
+                AlphabeticGrade = 'G'
+            };
+
+            var command = new UpdateStudentGradeCommand(gradeDto.StudentId, gradeDto);
+            var validator = new UpdateStudentGradeCommandValidator();
             var result = await validator.ValidateAsync(command);
 
-            Assert.Equal(5, result.Errors.Count);
+            Assert.Equal(4, result.Errors.Count);
         }
     }
 }

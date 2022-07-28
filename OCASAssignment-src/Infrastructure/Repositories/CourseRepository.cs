@@ -19,11 +19,11 @@ namespace OCASAPI.Infrastructure.Repositories
 
         public async Task<Course> AddCourseAsync(Course course)
         {
-            var existing = await _courses.Where(c => c.Id == course.Id).FirstOrDefaultAsync();
+            var existing = await _courses.Where(c => c.CourseCode == course.CourseCode).FirstOrDefaultAsync();
 
             if(existing != null)
             {
-                throw new ApiExceptions("Course already exists");
+                throw new ApiExceptions("A course with that course code already exists");
             }
 
             var newCourse = await _courses.AddAsync(course);
@@ -55,7 +55,7 @@ namespace OCASAPI.Infrastructure.Repositories
 
             var result = await _context.SaveChangesAsync();
 
-            if(result == 0)
+            if(result == 1)
             {
                 return true;
             }
@@ -90,7 +90,7 @@ namespace OCASAPI.Infrastructure.Repositories
             }
             else
             {
-                throw new ApiExceptions("Error saving course");
+                throw new ApiExceptions("Error updating course");
             }
             
         }
