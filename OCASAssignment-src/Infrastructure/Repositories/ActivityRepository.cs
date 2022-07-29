@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using OCAS.Domain.Common;
+using OCASAPI.Application.Exceptions;
 using OCASAPI.Application.Interfaces;
-using OCASAPI.Application.Requests;
 using OCASAPI.Infrastructure.Context;
 
 namespace OCASAPI.Infrastructure.Repositories
@@ -22,16 +22,25 @@ namespace OCASAPI.Infrastructure.Repositories
 
         public async Task<bool> AddPersonToActivityAsync(ActivitySignUp person)
         {
-            await _activityList.AddAsync(person);
-            var result = await _context.SaveChangesAsync();
+            var existing = await _activityList.Where(a => a.Email == person.Email).FirstOrDefaultAsync();
 
-            if(result == 1)
+            if(existing != null)
             {
-                return true;
+                throw new ApiExceptions("Person with that email is already enrolled in this activity");
             }
             else
             {
-                return false;
+                await _activityList.AddAsync(person);
+                var result = await _context.SaveChangesAsync();
+
+                if(result == 1)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
         }
 
