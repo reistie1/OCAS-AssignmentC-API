@@ -1,4 +1,3 @@
-using Microsoft.Extensions.Logging;
 using OCASAPI.Application.Interfaces;
 
 namespace OCASAPI.Infrastructure.LoggingAdapter

@@ -1,5 +1,4 @@
 using OCAS.Domain.Common;
-using OCASAPI.Application.Requests;
 
 namespace OCASAPI.Application.Interfaces
 {

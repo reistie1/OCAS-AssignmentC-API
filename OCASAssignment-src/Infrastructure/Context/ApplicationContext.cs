@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using OCAS.Domain.Common;
-using OCASAPI.Infrastructure.Seeds;
 
 namespace OCASAPI.Infrastructure.Context
 {

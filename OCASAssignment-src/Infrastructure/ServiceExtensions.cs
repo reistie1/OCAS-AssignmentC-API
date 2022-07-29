@@ -1,4 +1,3 @@
-using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using OCASAPI.Application.Interfaces;
 using OCASAPI.Infrastructure.Context;
