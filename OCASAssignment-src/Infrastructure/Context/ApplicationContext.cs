@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using OCAS.Domain.Common;
+using OCASAPI.Infrastructure.Seeds;
 
 namespace OCASAPI.Infrastructure.Context
 {
@@ -7,12 +8,8 @@ namespace OCASAPI.Infrastructure.Context
     {
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options){}
 
-        public virtual DbSet<Address> Address {get; set;}
-        public virtual DbSet<Course> Courses {get; set;}
-        public virtual DbSet<Grade> Grades {get; set;}
-        public virtual DbSet<School> Schools {get; set;} 
-        public virtual DbSet<Student> Students {get; set;}
-        public virtual DbSet<Teacher> Teachers {get; set;}
+        public virtual DbSet<Activity> Activities {get; set;}
+        public virtual DbSet<ActivitySignUp> ActivitySignup {get; set;}
 
         /// <summary>
         /// configure database schema for identity framework

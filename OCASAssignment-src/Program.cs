@@ -1,10 +1,8 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OCASAPI.Application.Extensions;
 using OCASAPI.Infrastructure.Context;
 using OCASAPI.Infrastructure.Extensions;
-using OCASAPI.Infrastructure.Identity.Seeds;
-using OCASAPI.Infrastructure.Models;
+using OCASAPI.Infrastructure.Seeds;
 using OCASAPI.WebApi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,28 +29,18 @@ var service = (IServiceScopeFactory)app.Services.GetService(typeof(IServiceScope
 
 using (var scope = app.Services.CreateScope())
 using(var db = service.CreateScope().ServiceProvider.GetService<ApplicationContext>()) 
-using(var authdb = service.CreateScope().ServiceProvider.GetService<IdentityContext>()) 
 {
     try
     {
-        var services = scope.ServiceProvider;
-        var roleManager = services.GetRequiredService<RoleManager<Role>>();
-        var userManager = services.GetRequiredService<UserManager<User>>();
-
         if(!db.Database.EnsureCreated())
-        {
-            
+        { 
             db.Database.Migrate();
-            authdb.Database.Migrate();
-            await DefaultRoles.SeedAsync(userManager, roleManager);  
-            await DefaultSuperAdmin.SeedAsync(userManager, roleManager, db);
+            seedActivityList(db);
         }
         else
         {
             db.Database.Migrate();
-            authdb.Database.Migrate();
-            await DefaultRoles.SeedAsync(userManager, roleManager);  
-            await DefaultSuperAdmin.SeedAsync(userManager, roleManager, db);
+            seedActivityList(db);
         }
         Console.WriteLine("Applying Migrations");
     }
@@ -86,3 +74,13 @@ app.UseEndpoints(endpoints => {
 });
 
 app.Run();
+
+void seedActivityList(ApplicationContext context)
+{
+    if(!context.Activities.Any())
+    {
+        var seed = new SeedActivities(context);
+        context.Activities.AddRange(seed.createList());
+        context.SaveChanges();
+    }
+}

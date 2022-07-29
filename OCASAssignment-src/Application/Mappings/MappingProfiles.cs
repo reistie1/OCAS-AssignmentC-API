@@ -1,7 +1,6 @@
 using AutoMapper;
 using OCAS.Domain.Common;
-using OCASAPI.Application.DTO.Common;
-using OCASAPI.Application.DTO.Requests;
+using OCASAPI.Application.Requests;
 
 namespace OCASAPI.Application.Mappings
 {
@@ -9,13 +8,15 @@ namespace OCASAPI.Application.Mappings
     {
         public MappingProfiles()
         {
-            CreateMap<Address, AddressDto>().ReverseMap();
-            CreateMap<Course, CourseDto>().ReverseMap();
-            CreateMap<Teacher, TeacherDto>().ReverseMap();
-            CreateMap<Student, StudentDto>().ReverseMap();
-            CreateMap<Grade, GradeDto>().ReverseMap();
-            //CreateMap<IReadOnlyList<Course>, IReadOnlyList<CourseDto>>().ReverseMap();
-            CreateMap<School, SchoolInfoRequest>().ReverseMap();
+            CreateMap<Activity, ActivityDto>().ReverseMap();
+            CreateMap<ActivityPersonResponse, ActivitySignUp>().ReverseMap();
+            CreateMap<ActivityPersonRequest, ActivitySignUp>().ReverseMap();
+            CreateMap<Activity, ActivityPersonResponse>().ReverseMap();
+            CreateMap<Activity, ActivityPersonRequest>().ReverseMap();
+            CreateMap<ActivitySignUp, ActivityPersonResponse>().ReverseMap();
+            CreateMap<ActivitySignUp, ActivityPersonRequest>().ReverseMap();
+            CreateMap<IReadOnlyList<Activity>, IReadOnlyList<ActivityPersonResponse>>().ReverseMap();
+
         }
 
     }
