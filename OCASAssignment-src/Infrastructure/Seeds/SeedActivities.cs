@@ -9,7 +9,6 @@ namespace OCASAPI.Infrastructure.Seeds
         public SeedActivities(ApplicationContext context)
         {
             _context = context;
-           
         }
 
         public List<Activity> createList()
@@ -27,6 +26,5 @@ namespace OCASAPI.Infrastructure.Seeds
 
             return Activities;
         }
-        
     }
 }

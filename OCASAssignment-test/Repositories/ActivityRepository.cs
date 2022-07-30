@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using OCAS.Domain.Common;
 using OCASAPI.Application.Exceptions;
+using OCASAPI.Application.Parameters;
 using OCASAPI.Infrastructure.Context;
 using OCASAPI.Infrastructure.Repositories;
 
@@ -56,7 +57,7 @@ namespace ActivityRepositoryTests
         [Fact]
         public async Task GetPeopleEnrolledInActivity_ReturnsEnrolledActivityList()
         {
-            var list = await _activityRepo.GetPeopleEnrolledInActivity(_activityList.First().Id);
+            var list = await _activityRepo.GetPeopleEnrolledInActivity(_activityList.First().Id, new RequestParameters(1, 50, null));
 
             Assert.NotEmpty(list);
             Assert.IsType<List<ActivitySignUp>>(list);
@@ -66,7 +67,7 @@ namespace ActivityRepositoryTests
         [Fact]
         public async Task GetPeopleEnrolledInActivity_ReturnsEmptyList()
         {
-            var list = await _activityRepo.GetPeopleEnrolledInActivity(Guid.NewGuid());
+            var list = await _activityRepo.GetPeopleEnrolledInActivity(Guid.NewGuid(), new RequestParameters(1, 50, null));
 
             Assert.Empty(list);
             Assert.IsType<List<ActivitySignUp>>(list);

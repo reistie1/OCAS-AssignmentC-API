@@ -18,7 +18,7 @@ namespace OCASAPI.Application.Features
         }
         public async Task<Response<IReadOnlyList<ActivityPersonResponse>>> Handle(GetJoinedActivityListCommand request, CancellationToken cancellationToken)
         {
-            var result = await _activityRepository.GetPeopleEnrolledInActivity(request.ActivityId);
+            var result = await _activityRepository.GetPeopleEnrolledInActivity(request.ActivityId, request.RequestParams);
 
             return new Response<IReadOnlyList<ActivityPersonResponse>>(_mapper.Map<IReadOnlyList<ActivityPersonResponse>>(result));
         }

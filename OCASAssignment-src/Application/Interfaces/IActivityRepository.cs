@@ -1,4 +1,5 @@
 using OCAS.Domain.Common;
+using OCASAPI.Application.Parameters;
 
 namespace OCASAPI.Application.Interfaces
 {
@@ -6,6 +7,6 @@ namespace OCASAPI.Application.Interfaces
     {
         Task<bool> AddPersonToActivityAsync(ActivitySignUp person);
         Task<IReadOnlyList<Activity>> GetActivityListAsync();
-        Task<IReadOnlyList<ActivitySignUp>> GetPeopleEnrolledInActivity(Guid ActivityId);
+        Task<IReadOnlyList<ActivitySignUp>> GetPeopleEnrolledInActivity(Guid ActivityId, RequestParameters requestParams);
     }
 }

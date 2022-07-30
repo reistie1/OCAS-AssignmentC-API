@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using OCAS.Domain.Common;
 using OCASAPI.Application.Exceptions;
 using OCASAPI.Application.Interfaces;
+using OCASAPI.Application.Parameters;
 using OCASAPI.Infrastructure.Context;
 
 namespace OCASAPI.Infrastructure.Repositories
@@ -22,7 +23,7 @@ namespace OCASAPI.Infrastructure.Repositories
 
         public async Task<bool> AddPersonToActivityAsync(ActivitySignUp person)
         {
-            var existing = await _activityList.Where(a => a.Email == person.Email).FirstOrDefaultAsync();
+            var existing = await _activityList.Where(a => a.ActivityId == person.ActivityId && a.Email == person.Email).FirstOrDefaultAsync();
 
             if(existing != null)
             {
@@ -49,9 +50,13 @@ namespace OCASAPI.Infrastructure.Repositories
             return await _activities.AsNoTracking().ToListAsync();
         }
 
-        public async Task<IReadOnlyList<ActivitySignUp>> GetPeopleEnrolledInActivity(Guid ActivityId)
+        public async Task<IReadOnlyList<ActivitySignUp>> GetPeopleEnrolledInActivity(Guid ActivityId, RequestParameters requestParams)
         {
-            return await _activityList.Where(a => a.ActivityId == ActivityId).AsNoTracking().ToListAsync();
+            return await _activityList.Where(a => a.ActivityId == ActivityId)
+            .Skip((requestParams.PageNumber - 1) * requestParams.PageSize)
+            .Take(requestParams.PageSize)
+            .AsNoTracking()
+            .ToListAsync();
         }
     }
 }

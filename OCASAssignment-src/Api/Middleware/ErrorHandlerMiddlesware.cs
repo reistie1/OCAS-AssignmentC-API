@@ -1,3 +1,4 @@
+using OCASAPI.Application.Exceptions;
 using OCASAPI.Application.Wrappers;
 using System.Net;
 using System.Text.Json;
@@ -40,7 +41,6 @@ namespace OCASAPI.WebAPI.Middleware
             {
                 var response = context.Response;
                 response.ContentType = "application/json";
-                Console.WriteLine(error.StackTrace);
                 var responseModel = new Response<string>(error.Message) { Succeeded = false};
                 
                 switch (error)
@@ -48,6 +48,15 @@ namespace OCASAPI.WebAPI.Middleware
                     case KeyNotFoundException e:
                         // not found error
                         response.StatusCode = (int)HttpStatusCode.NotFound;
+                        break;
+                    case ApiExceptions e:
+                        //general exception
+                        response.StatusCode = (int)HttpStatusCode.BadRequest;
+                        break;
+                    case ValidationException e:
+                        // custom application error
+                        response.StatusCode = (int)HttpStatusCode.BadRequest;
+                        responseModel.Errors = e.Errors;
                         break;
                     case Exception e:
                         //general exception

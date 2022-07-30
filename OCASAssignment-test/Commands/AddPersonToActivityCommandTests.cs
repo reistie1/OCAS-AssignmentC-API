@@ -49,7 +49,7 @@ namespace OCASAPI.Tests.Commands
             var validator = new AddToActivityListCommandValidator();
             var result = await validator.ValidateAsync(command);
 
-            Assert.Equal(5, result.Errors.Count);
+            Assert.Equal(7, result.Errors.Count);
         }
     }
 }

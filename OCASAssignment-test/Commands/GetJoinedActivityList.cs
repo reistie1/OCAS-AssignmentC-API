@@ -3,6 +3,7 @@ using Moq;
 using OCAS.Domain.Common;
 using OCASAPI.Application.Features;
 using OCASAPI.Application.Interfaces;
+using OCASAPI.Application.Parameters;
 using OCASAPI.Application.Requests;
 using OCASAPI.Application.Validators;
 
@@ -47,7 +48,7 @@ namespace OCASAPI.Tests.Commands
             };;
 
             _mockActivityRepo = new Mock<IActivityRepository>();
-            _mockActivityRepo.Setup(a => a.GetPeopleEnrolledInActivity(_activityList.First().Id)).ReturnsAsync(_singedUpActivityList);
+            _mockActivityRepo.Setup(a => a.GetPeopleEnrolledInActivity(_activityList.First().Id, It.IsAny<RequestParameters>())).ReturnsAsync(_singedUpActivityList);
 
 
             _mockMapper = new Mock<IMapper>();
@@ -57,7 +58,7 @@ namespace OCASAPI.Tests.Commands
         [Fact]
         public async Task GetJoinedActivityList_ReturnsListOfPersonEnrolledInActivityList()
         {
-            var command = new GetJoinedActivityListCommand(_activityList.First().Id);
+            var command = new GetJoinedActivityListCommand(_activityList.First().Id, new RequestParameters(1, 50, null));
             var handler = new GetJoinedActivityListCommandHandler(_mockMapper.Object, _mockActivityRepo.Object);
             var result = await handler.Handle(command, CancellationToken.None);
 
@@ -69,7 +70,7 @@ namespace OCASAPI.Tests.Commands
         [Fact]
         public async Task GetJoinedActivityList_ValidatesRequest()
         {
-            var command = new GetJoinedActivityListCommand(Guid.Empty);
+            var command = new GetJoinedActivityListCommand(Guid.Empty, new RequestParameters(1, 50, null));
             var validator = new GetJoinedActivityListCommandValidator();
             var result = await validator.ValidateAsync(command);
 
