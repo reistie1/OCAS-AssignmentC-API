@@ -25,7 +25,7 @@ namespace OCASAPI.Application.Validators
                 .NotEmpty().WithMessage("Activity Id must not be empty.");
             RuleFor(c => c.Person.Gender)
                 .NotEmpty().WithMessage("Gender must not be empty.")
-                .Must(p => p == 'M' || p == 'F');
+                .Must(p => p == "Male" || p == "Female").WithMessage("Gender selection must be Male or Female respectively");
                 
 
         }   

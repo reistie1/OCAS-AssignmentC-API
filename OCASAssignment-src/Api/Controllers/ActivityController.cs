@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using OCASAPI.Application.Features;
@@ -77,7 +78,7 @@ namespace OCASAPI.WebAPI.Controllers
 
                 return Ok(result);
             }
-            catch(Exception e)
+            catch(ValidationException e)
             {
                 _logger.LogWarning("Error get people in activity list {e} - {trace}", e.Message, e.StackTrace);
                 return BadRequest(e);

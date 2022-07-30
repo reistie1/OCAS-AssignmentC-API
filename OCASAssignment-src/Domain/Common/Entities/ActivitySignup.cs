@@ -18,7 +18,7 @@ namespace OCAS.Domain.Common
         public Guid ActivityId {get; set;}
         public virtual Activity Activity {get; set;}
         public DateTime SignedUpDate {get; set;}
-        public char Gender {get; set;}
+        public string Gender {get; set;}
 
     }
 }

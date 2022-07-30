@@ -9,6 +9,6 @@ namespace OCASAPI.Application.Requests
         public Guid ActivityId {get; set;}
         public string Comments {get; set;}
         public DateTime SignedUpDate {get; set;}
-        public char Gender {get; set;}
+        public string Gender {get; set;}
     }
 }
