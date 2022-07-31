@@ -6,6 +6,7 @@ using OCASAPI.Application.Interfaces;
 using OCASAPI.Application.Parameters;
 using OCASAPI.Application.Requests;
 using OCASAPI.Application.Validators;
+using OCASAPI.Application.Wrappers;
 
 namespace OCASAPI.Tests.Commands
 {
@@ -63,6 +64,7 @@ namespace OCASAPI.Tests.Commands
             var result = await handler.Handle(command, CancellationToken.None);
 
             Assert.IsType<List<ActivityPersonResponse>>(result.Data);
+            Assert.IsType<PagedResponse<IReadOnlyList<ActivityPersonResponse>>>(result);
             Assert.NotEmpty(result.Data);
             Assert.Equal(_personListResponse, result.Data);
         }

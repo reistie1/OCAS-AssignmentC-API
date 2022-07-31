@@ -5,7 +5,7 @@ using OCASAPI.Application.Wrappers;
 
 namespace OCASAPI.Application.Features
 {
-    public class GetJoinedActivityListCommand : IRequest<Response<IReadOnlyList<ActivityPersonResponse>>>
+    public class GetJoinedActivityListCommand : IRequest<PagedResponse<IReadOnlyList<ActivityPersonResponse>>>
     {
         public GetJoinedActivityListCommand(Guid activityId, RequestParameters requestParams)
         {
