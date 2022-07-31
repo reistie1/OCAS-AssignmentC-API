@@ -51,8 +51,6 @@ using(var db = service.CreateScope().ServiceProvider.GetService<ApplicationConte
 }
 
 
-
-
 AppExtensions.UseSwaggerExtension(app);
 AppExtensions.UseErrorHandlingMiddleware(app);
 

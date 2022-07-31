@@ -55,7 +55,7 @@ namespace OCASAPI.WebAPI.Middleware
                         break;
                     case ValidationException e:
                         // custom application error
-                        response.StatusCode = (int)HttpStatusCode.BadRequest;
+                        response.StatusCode = (int)HttpStatusCode.OK;
                         responseModel.Errors = e.Errors;
                         break;
                     case Exception e:
